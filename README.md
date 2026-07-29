@@ -65,18 +65,21 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 2 — Project foundation**
+**Phase 3 — Data acquisition and validation**
 
-The repository structure, project objective, data-safety rules, and initial
-Python environment have been established. No modelling claims have been made
-yet.
+The source files have been profiled and a reproducible data-quality workflow
+has been added. The published merged dataset contains repeated
+country-crop-year records caused by multiple temperature observations. The
+pipeline removes semantic duplicates, averages repeated temperatures, checks
+stable domain rules, and produces one validated observation per country, crop,
+and year. No modelling claims have been made yet.
 
 ## Data source
 
-The project plans to use the
+The project uses the
 [Crop Yield Prediction Dataset](https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset).
-The raw dataset is not stored in this repository. Download and validation
-instructions will be added during the data-acquisition phase.
+The raw and processed datasets are not stored in this repository. See
+[`data/README.md`](data/README.md) for download and validation instructions.
 
 ## Author
 
