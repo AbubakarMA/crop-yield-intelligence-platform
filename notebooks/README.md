@@ -21,3 +21,5 @@ does not depend on manually running notebooks.
 - `03_feature_engineering.ipynb` applies the chronological split, separates the
   target, and fits leakage-safe categorical and numeric transformations on
   training data only.
+- `04_model_experiments.ipynb` compares global- and crop-median benchmarks with
+  a leakage-safe linear-regression pipeline using validation data only.
