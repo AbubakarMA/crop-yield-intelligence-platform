@@ -6,7 +6,8 @@ Notebooks will be numbered in execution order:
 2. `02_exploratory_data_analysis.ipynb`
 3. `03_feature_engineering.ipynb`
 4. `04_model_experiments.ipynb`
-5. `05_model_interpretation.ipynb`
+5. `05_model_selection.ipynb`
+6. `06_model_interpretation.ipynb`
 
 Reusable logic will be moved into `src/crop_yield/` so production behaviour
 does not depend on manually running notebooks.
@@ -23,3 +24,5 @@ does not depend on manually running notebooks.
   training data only.
 - `04_model_experiments.ipynb` compares global- and crop-median benchmarks with
   a leakage-safe linear-regression pipeline using validation data only.
+- `05_model_selection.ipynb` compares positive-output linear and nonlinear
+  candidates, then analyzes the leading random forest by crop and year.
