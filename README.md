@@ -65,7 +65,7 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 6 — Leakage-safe feature engineering**
+**Phase 7 — Regression benchmarks and linear baseline**
 
 The source files have been profiled and a reproducible data-quality workflow
 produces one validated observation per country, crop, and year. Exploratory
@@ -77,7 +77,10 @@ comparisons. A chronological train/validation/test strategy prevents future
 years from influencing model development. The preprocessing pipeline one-hot
 encodes country and crop, standardizes numeric features, reduces pesticide
 right-skew, and tolerates previously unseen categories without learning from
-validation or test data.
+validation or test data. Validation experiments compare global- and crop-median
+benchmarks with linear regression. Linear regression improves validation MAE
+but still produces physically impossible negative-yield predictions, so it is
+retained as a baseline rather than selected for production.
 
 See
 [`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
@@ -85,7 +88,9 @@ for the complete Phase 4 analysis and
 [`docs/validation_strategy.md`](docs/validation_strategy.md) for the modelling
 evaluation design. See
 [`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb)
-for the leakage-safe feature workflow.
+for the leakage-safe feature workflow and
+[`notebooks/04_model_experiments.ipynb`](notebooks/04_model_experiments.ipynb)
+for the first model comparison.
 
 ## Data source
 
