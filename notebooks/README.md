@@ -10,3 +10,11 @@ Notebooks will be numbered in execution order:
 
 Reusable logic will be moved into `src/crop_yield/` so production behaviour
 does not depend on manually running notebooks.
+
+## Completed
+
+- `01_data_validation.ipynb` validates the source grain and creates the local
+  processed modelling table.
+- `02_exploratory_data_analysis.ipynb` documents distributions, crop-level
+  yield differences, the time trend, numeric associations, and important
+  interpretation limitations.
