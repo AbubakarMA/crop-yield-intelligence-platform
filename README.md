@@ -65,7 +65,7 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 9 — Temporal hyperparameter tuning**
+**Phase 10 — Model interpretation**
 
 The source files have been profiled and a reproducible data-quality workflow
 produces one validated observation per country, crop, and year. Exploratory
@@ -87,7 +87,13 @@ larger remaining errors for cassava, potatoes, and sweet potatoes.
 Hyperparameters are now compared with expanding temporal folds inside the
 training period. The selected random-forest configuration is stable across
 random seeds and improves outer-validation MAE while preserving non-negative
-yield predictions. The final test years remain untouched.
+yield predictions. Interpretation shows that crop type is the dominant
+predictive input. Temperature, rainfall, pesticide totals, and country also
+matter to the fitted model, but their importance is not causal evidence and is
+affected by feature dependence. The forest cannot extrapolate the year trend:
+future years beyond the training range follow the same terminal branches when
+other inputs are fixed. This limitation must shape the deployment scope or
+motivate a forecasting redesign. The final test years remain untouched.
 
 See
 [`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
@@ -101,7 +107,9 @@ for the first model comparison and
 [`notebooks/05_model_selection.ipynb`](notebooks/05_model_selection.ipynb) for
 the nonlinear candidate evaluation and
 [`notebooks/06_hyperparameter_tuning.ipynb`](notebooks/06_hyperparameter_tuning.ipynb)
-for the chronological tuning experiment.
+for the chronological tuning experiment and
+[`notebooks/07_model_interpretation.ipynb`](notebooks/07_model_interpretation.ipynb)
+for model reliance, caveats, and extrapolation checks.
 
 ## Data source
 
