@@ -13,6 +13,9 @@ from crop_yield.models import (
     CropMedianRegressor,
     build_global_median_baseline,
     build_linear_regression_pipeline,
+    build_log_target_ridge_pipeline,
+    build_poisson_gradient_boosting_pipeline,
+    build_random_forest_pipeline,
 )
 from crop_yield.preprocessing import split_features_target
 
@@ -69,6 +72,33 @@ class RegressionModelTests(unittest.TestCase):
 
         self.assertEqual(predictions.shape, (1,))
         self.assertTrue(np.isfinite(predictions).all())
+
+    def test_log_target_ridge_predictions_are_positive(self) -> None:
+        features, target = split_features_target(sample_modeling_data())
+        model = build_log_target_ridge_pipeline().fit(features, target)
+
+        predictions = model.predict(features)
+
+        self.assertTrue((predictions > 0).all())
+
+    def test_random_forest_predictions_are_non_negative(self) -> None:
+        features, target = split_features_target(sample_modeling_data())
+        model = build_random_forest_pipeline().fit(features, target)
+
+        predictions = model.predict(features)
+
+        self.assertTrue((predictions >= 0).all())
+
+    def test_poisson_gradient_boosting_predictions_are_positive(self) -> None:
+        features, target = split_features_target(sample_modeling_data())
+        model = build_poisson_gradient_boosting_pipeline().fit(
+            features,
+            target,
+        )
+
+        predictions = model.predict(features)
+
+        self.assertTrue((predictions > 0).all())
 
     def test_regression_metrics_match_known_example(self) -> None:
         metrics = regression_metrics(
