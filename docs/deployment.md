@@ -2,8 +2,8 @@
 
 ## Live application
 
-The public portfolio application is available at
-[crop-yield-intelligence.alutiba.chatgpt.site](https://crop-yield-intelligence.alutiba.chatgpt.site).
+The public portfolio application is deployed through GitHub Pages at
+[abubakarma.github.io/crop-yield-intelligence-platform](https://abubakarma.github.io/crop-yield-intelligence-platform/).
 
 It loads a compressed, depth-capped random forest and performs inference
 directly in the browser. The portable forest was selected using validation

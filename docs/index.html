@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An interactive machine-learning platform for estimating historical crop yield."
+    />
+    <title>Crop Yield Intelligence Platform</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="Crop Yield Intelligence">
+          <span class="brand-mark">CY</span>
+          <span>Crop Yield Intelligence</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="#estimator">Estimator</a>
+          <a href="#method">Method</a>
+          <a href="#limitations">Limitations</a>
+          <a class="github-link" href="https://github.com/AbubakarMA/crop-yield-intelligence-platform">View source</a>
+        </nav>
+      </header>
+
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">Agricultural machine learning · v1.0</p>
+          <h1>Turn historical crop data into a defensible yield estimate.</h1>
+          <p class="hero-summary">
+            Explore how crop, country, rainfall, temperature, pesticide use and
+            year combine in a leakage-tested random forest trained on 13,130
+            historical observations.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-action" href="#estimator">Try the estimator</a>
+            <a class="secondary-action" href="#method">See how it works</a>
+          </div>
+          <p class="scope-note">
+            Historical conditional estimate—not a causal recommendation or a
+            long-range forecast.
+          </p>
+        </div>
+        <div class="hero-panel" aria-label="Final test results">
+          <div class="panel-topline">
+            <span>Final test · 2011–2013</span>
+            <span class="status-dot">Verified</span>
+          </div>
+          <div class="hero-metric">
+            <strong id="test-r2">0.934</strong>
+            <span>Test R²</span>
+          </div>
+          <div class="metric-grid">
+            <div><strong id="test-mae">11,815</strong><span>MAE · hg/ha</span></div>
+            <div><strong>0</strong><span>Negative predictions</span></div>
+          </div>
+          <div class="trend-visual" aria-hidden="true">
+            <span style="height:28%"></span><span style="height:40%"></span>
+            <span style="height:35%"></span><span style="height:58%"></span>
+            <span style="height:48%"></span><span style="height:72%"></span>
+            <span style="height:66%"></span><span style="height:84%"></span>
+            <span style="height:78%"></span><span style="height:94%"></span>
+          </div>
+          <p>Chronological validation keeps future years out of training.</p>
+        </div>
+      </section>
+
+      <section class="estimator-section" id="estimator">
+        <div class="section-heading">
+          <p class="eyebrow">Interactive model</p>
+          <h2>Build one historical scenario</h2>
+          <p>
+            Inputs are restricted to categories and years represented in the
+            source data. National pesticide use is not a farm-level dose.
+          </p>
+        </div>
+        <div class="estimator-shell">
+          <form id="prediction-form">
+            <div class="field-grid">
+              <label>Country<select id="country" disabled><option>Ghana</option></select></label>
+              <label>Crop<select id="crop" disabled><option>Maize</option></select></label>
+              <label>Historical year<input id="year" type="number" min="1990" max="2013" value="2013" /></label>
+              <label>Annual rainfall (mm)<input id="rainfall" type="number" min="1" step="1" value="1200" /></label>
+              <label>National pesticide use (tonnes)<input id="pesticides" type="number" min="0" step="1" value="100" /></label>
+              <label>Average temperature (°C)<input id="temperature" type="number" min="-30" max="50" step="0.1" value="25" /></label>
+            </div>
+            <p id="form-message" class="form-message" hidden></p>
+            <button id="estimate-button" type="submit" disabled>Loading model…</button>
+          </form>
+          <aside class="prediction-card" aria-live="polite">
+            <p class="result-label">Estimated yield</p>
+            <strong class="prediction-value"><span id="yield-tonnes">—</span><small> t/ha</small></strong>
+            <p id="yield-hg" class="result-subtitle">Complete the scenario and run the model.</p>
+            <div id="result-details" hidden>
+              <div class="result-divider"></div>
+              <dl>
+                <div><dt>Forest spread</dt><dd id="forest-spread">—</dd></div>
+                <div><dt>Model version</dt><dd id="model-version">—</dd></div>
+              </dl>
+              <p class="result-caveat">Tree spread is a model-disagreement signal, not a calibrated confidence interval.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="method-section" id="method">
+        <div class="section-heading">
+          <p class="eyebrow">From raw data to prediction</p>
+          <h2>A production workflow with evidence at every step</h2>
+        </div>
+        <div class="method-grid">
+          <article><span>01</span><h3>Validate</h3><p>Resolve duplicates and enforce one country–crop–year observation.</p></article>
+          <article><span>02</span><h3>Split by time</h3><p>Train on 1990–2007, validate on 2008–2010 and seal 2011–2013.</p></article>
+          <article><span>03</span><h3>Compare</h3><p>Benchmark linear and nonlinear models using MAE, RMSE and R².</p></article>
+          <article><span>04</span><h3>Deploy</h3><p>Serve a portable 100-tree forest with tested input boundaries.</p></article>
+        </div>
+      </section>
+
+      <section class="limitations-section" id="limitations">
+        <div>
+          <p class="eyebrow">Responsible use</p>
+          <h2>What this model does not know</h2>
+          <p>Strong predictive accuracy does not make the data causal or the model suitable for every agricultural decision.</p>
+        </div>
+        <ul id="limitations-list">
+          <li>The model estimates historical patterns; it is not a long-range climate or policy forecast.</li>
+          <li>Rainfall is constant through time within each country in the source data.</li>
+          <li>Pesticide use is a national total rather than a per-hectare rate.</li>
+          <li>Feature importance is predictive, not causal.</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>Built by <strong>Abubakar Mamudu Alutiba</strong> · Crop and Soil Sciences + Data Analytics</p>
+        <a href="https://github.com/AbubakarMA/crop-yield-intelligence-platform">Documentation and source code</a>
+      </footer>
+    </main>
+  </body>
+</html>
