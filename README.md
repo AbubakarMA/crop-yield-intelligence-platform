@@ -65,14 +65,19 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 3 — Data acquisition and validation**
+**Phase 4 — Exploratory data analysis**
 
 The source files have been profiled and a reproducible data-quality workflow
-has been added. The published merged dataset contains repeated
-country-crop-year records caused by multiple temperature observations. The
-pipeline removes semantic duplicates, averages repeated temperatures, checks
-stable domain rules, and produces one validated observation per country, crop,
-and year. No modelling claims have been made yet.
+produces one validated observation per country, crop, and year. Exploratory
+analysis shows that crop type strongly separates yield, overall numeric
+associations with yield are weak, 2003 is absent, and rainfall is constant
+through time within each country. The analysis treats these relationships as
+descriptive rather than causal and documents crop-mix confounding in country
+comparisons.
+
+See
+[`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
+for the complete Phase 4 analysis.
 
 ## Data source
 
