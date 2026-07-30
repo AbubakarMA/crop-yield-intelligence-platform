@@ -18,3 +18,6 @@ does not depend on manually running notebooks.
 - `02_exploratory_data_analysis.ipynb` documents distributions, crop-level
   yield differences, the time trend, numeric associations, and important
   interpretation limitations.
+- `03_feature_engineering.ipynb` applies the chronological split, separates the
+  target, and fits leakage-safe categorical and numeric transformations on
+  training data only.
