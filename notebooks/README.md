@@ -9,6 +9,7 @@ Notebooks will be numbered in execution order:
 5. `05_model_selection.ipynb`
 6. `06_hyperparameter_tuning.ipynb`
 7. `07_model_interpretation.ipynb`
+8. `08_final_model_evaluation.ipynb`
 
 Reusable logic will be moved into `src/crop_yield/` so production behaviour
 does not depend on manually running notebooks.
@@ -30,3 +31,6 @@ does not depend on manually running notebooks.
 - `06_hyperparameter_tuning.ipynb` tunes random-forest complexity with
   expanding temporal folds, checks seed stability, and evaluates the selected
   configuration on the outer validation years without touching test data.
+- `07_model_interpretation.ipynb` measures grouped permutation importance,
+  reconciles it with native tree importance, and documents the forest's
+  inability to extrapolate the year feature beyond its training range.
