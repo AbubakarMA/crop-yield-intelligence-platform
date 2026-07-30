@@ -65,7 +65,7 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 7 — Regression benchmarks and linear baseline**
+**Phase 8 — Nonlinear model selection**
 
 The source files have been profiled and a reproducible data-quality workflow
 produces one validated observation per country, crop, and year. Exploratory
@@ -80,7 +80,10 @@ right-skew, and tolerates previously unseen categories without learning from
 validation or test data. Validation experiments compare global- and crop-median
 benchmarks with linear regression. Linear regression improves validation MAE
 but still produces physically impossible negative-yield predictions, so it is
-retained as a baseline rather than selected for production.
+retained as a baseline rather than selected for production. Positive-output and
+tree-based candidates have now been compared. Random forest is the strongest
+initial validation candidate, with substantially lower overall error but
+larger remaining errors for cassava, potatoes, and sweet potatoes.
 
 See
 [`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
@@ -90,7 +93,9 @@ evaluation design. See
 [`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb)
 for the leakage-safe feature workflow and
 [`notebooks/04_model_experiments.ipynb`](notebooks/04_model_experiments.ipynb)
-for the first model comparison.
+for the first model comparison and
+[`notebooks/05_model_selection.ipynb`](notebooks/05_model_selection.ipynb) for
+the nonlinear candidate evaluation.
 
 ## Data source
 
