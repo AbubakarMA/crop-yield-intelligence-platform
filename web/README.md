@@ -14,5 +14,5 @@ derived binary artifact. The application decompresses it, reproduces the
 scikit-learn transformations, traverses every tree, and averages the tree
 predictions in the browser.
 
-The production application is available at
-[crop-yield-intelligence.alutiba.chatgpt.site](https://crop-yield-intelligence.alutiba.chatgpt.site).
+The production application is available through GitHub Pages at
+[abubakarma.github.io/crop-yield-intelligence-platform](https://abubakarma.github.io/crop-yield-intelligence-platform/).
