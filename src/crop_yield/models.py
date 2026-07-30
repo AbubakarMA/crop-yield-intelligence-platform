@@ -108,7 +108,15 @@ def build_log_target_ridge_pipeline() -> TransformedTargetRegressor:
     )
 
 
-def build_random_forest_pipeline() -> Pipeline:
+def build_random_forest_pipeline(
+    *,
+    n_estimators: int = 300,
+    max_depth: int | None = None,
+    min_samples_leaf: int = 2,
+    max_features: float = 0.8,
+    random_state: int = 42,
+    n_jobs: int = -1,
+) -> Pipeline:
     """Return a deterministic nonlinear random-forest candidate."""
     return Pipeline(
         steps=[
@@ -116,14 +124,27 @@ def build_random_forest_pipeline() -> Pipeline:
             (
                 "model",
                 RandomForestRegressor(
-                    n_estimators=300,
-                    min_samples_leaf=2,
-                    max_features=0.8,
-                    random_state=42,
-                    n_jobs=-1,
+                    n_estimators=n_estimators,
+                    max_depth=max_depth,
+                    min_samples_leaf=min_samples_leaf,
+                    max_features=max_features,
+                    random_state=random_state,
+                    n_jobs=n_jobs,
                 ),
             ),
         ]
+    )
+
+
+def build_tuned_random_forest_pipeline() -> Pipeline:
+    """Return the random forest selected by temporal hyperparameter tuning."""
+    return build_random_forest_pipeline(
+        n_estimators=300,
+        max_depth=None,
+        min_samples_leaf=1,
+        max_features=0.8,
+        random_state=42,
+        n_jobs=-1,
     )
 
 
