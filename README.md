@@ -65,7 +65,7 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 5 — Leakage-resistant validation design**
+**Phase 6 — Leakage-safe feature engineering**
 
 The source files have been profiled and a reproducible data-quality workflow
 produces one validated observation per country, crop, and year. Exploratory
@@ -73,14 +73,19 @@ analysis shows that crop type strongly separates yield, overall numeric
 associations with yield are weak, 2003 is absent, and rainfall is constant
 through time within each country. The analysis treats these relationships as
 descriptive rather than causal and documents crop-mix confounding in country
-comparisons. A chronological train/validation/test strategy now prevents future
-years from influencing model development.
+comparisons. A chronological train/validation/test strategy prevents future
+years from influencing model development. The preprocessing pipeline one-hot
+encodes country and crop, standardizes numeric features, reduces pesticide
+right-skew, and tolerates previously unseen categories without learning from
+validation or test data.
 
 See
 [`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
 for the complete Phase 4 analysis and
 [`docs/validation_strategy.md`](docs/validation_strategy.md) for the modelling
-evaluation design.
+evaluation design. See
+[`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb)
+for the leakage-safe feature workflow.
 
 ## Data source
 
