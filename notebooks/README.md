@@ -34,3 +34,5 @@ does not depend on manually running notebooks.
 - `07_model_interpretation.ipynb` measures grouped permutation importance,
   reconciles it with native tree importance, and documents the forest's
   inability to extrapolate the year feature beyond its training range.
+- `08_final_model_evaluation.ipynb` performs the locked 2011–2013 test
+  evaluation and documents the research-versus-deployment model trade-off.
