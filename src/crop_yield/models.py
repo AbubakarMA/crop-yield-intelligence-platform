@@ -5,8 +5,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.compose import TransformedTargetRegressor
 from sklearn.dummy import DummyRegressor
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import (
+    HistGradientBoostingRegressor,
+    RandomForestRegressor,
+)
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_is_fitted
 
@@ -84,5 +89,59 @@ def build_linear_regression_pipeline() -> Pipeline:
         steps=[
             ("preprocessor", build_preprocessor()),
             ("model", LinearRegression()),
+        ]
+    )
+
+
+def build_log_target_ridge_pipeline() -> TransformedTargetRegressor:
+    """Return regularized linear regression with positive target predictions."""
+    regression_pipeline = Pipeline(
+        steps=[
+            ("preprocessor", build_preprocessor()),
+            ("model", Ridge(alpha=1.0)),
+        ]
+    )
+    return TransformedTargetRegressor(
+        regressor=regression_pipeline,
+        func=np.log,
+        inverse_func=np.exp,
+    )
+
+
+def build_random_forest_pipeline() -> Pipeline:
+    """Return a deterministic nonlinear random-forest candidate."""
+    return Pipeline(
+        steps=[
+            ("preprocessor", build_preprocessor()),
+            (
+                "model",
+                RandomForestRegressor(
+                    n_estimators=300,
+                    min_samples_leaf=2,
+                    max_features=0.8,
+                    random_state=42,
+                    n_jobs=-1,
+                ),
+            ),
+        ]
+    )
+
+
+def build_poisson_gradient_boosting_pipeline() -> Pipeline:
+    """Return positive-output gradient boosting for non-negative yield."""
+    return Pipeline(
+        steps=[
+            ("preprocessor", build_preprocessor()),
+            (
+                "model",
+                HistGradientBoostingRegressor(
+                    loss="poisson",
+                    max_iter=300,
+                    learning_rate=0.05,
+                    max_leaf_nodes=31,
+                    l2_regularization=1.0,
+                    random_state=42,
+                ),
+            ),
         ]
     )
