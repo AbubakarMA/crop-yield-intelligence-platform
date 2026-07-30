@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      MODEL_PATH: /app/artifacts/crop_yield_random_forest.joblib
+      MODEL_METADATA_PATH: /app/artifacts/model_metadata.json
+
+  app:
+    image: python:3.12-slim
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir streamlit httpx &&
+      streamlit run streamlit_app.py --server.address=0.0.0.0"
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://api:8000
+    volumes:
+      - ./streamlit_app.py:/app/streamlit_app.py:ro
+    depends_on:
+      - api

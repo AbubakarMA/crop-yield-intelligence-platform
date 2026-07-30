@@ -32,6 +32,7 @@ data/processed/*
 artifacts/*
 models/*
 reports/figures/*
+.python-version
 
 # Preserve documentation files inside ignored directories
 !data/README.md

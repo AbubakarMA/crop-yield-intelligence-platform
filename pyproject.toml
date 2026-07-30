@@ -4,12 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "crop-yield-intelligence-platform"
-version = "0.1.0"
+version = "1.0.0"
 description = "End-to-end crop-yield prediction and deployment portfolio project"
 requires-python = ">=3.11"
 authors = [
   { name = "Abubakar Mamudu Alutiba", email = "Alutiba04@gmail.com" }
 ]
+
+[project.scripts]
+crop-yield-train = "crop_yield.production:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
