@@ -1,122 +1,119 @@
 # Crop Yield Intelligence Platform
 
-An end-to-end machine-learning portfolio project for predicting agricultural
-crop yield from historical crop, location, weather, and pesticide data.
+[![CI](https://github.com/AbubakarMA/crop-yield-intelligence-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/AbubakarMA/crop-yield-intelligence-platform/actions/workflows/ci.yml)
 
-## Project objective
+An end-to-end machine-learning system for estimating historical agricultural
+yield from crop, country, weather, pesticide, and year data.
 
-The project asks:
+**[Open the deployed application](https://crop-yield-intelligence.alutiba.chatgpt.site)**
 
-> How accurately can historical crop, location, rainfall, temperature, and
-> pesticide information predict agricultural yield?
+## What the project demonstrates
 
-The final product will include reproducible data preparation, exploratory
-analysis, regression modelling, model interpretation, a prediction API, a
-user-facing application, automated tests, containerisation, deployment, and
-monitoring.
+- regression problem framing with a non-causal scope
+- grain validation and duplicate resolution
+- chronological train/validation/test splitting
+- leakage-safe preprocessing
+- benchmark, linear, positive-output, and tree-model comparison
+- expanding temporal cross-validation and hyperparameter tuning
+- final sealed-test evaluation and crop-level error analysis
+- versioned model artifacts and metadata
+- a validated FastAPI prediction contract and Streamlit API client
+- an interactive browser deployment
+- automated tests, linting, CI, and Docker packaging
 
-## Intended users
+## Final results
 
-- Agricultural analysts
-- Extension organisations
-- Agribusinesses
-- NGOs and government planning teams
-- Researchers
+All model decisions were completed on 1990–2010 data before opening the
+2011–2013 test period.
 
-## Planned architecture
+| Model | Purpose | Test MAE | Test RMSE | Test R² |
+|---|---|---:|---:|---:|
+| 300-tree unrestricted random forest | Research model | 11,065.87 hg/ha | 21,938.75 hg/ha | 0.9382 |
+| 100-tree depth-18 random forest | Deployed model | 11,815.30 hg/ha | 22,615.23 hg/ha | 0.9343 |
 
-```text
-Kaggle data -> validation -> analysis -> feature pipeline -> trained model
-                                                           |
-                                                           v
-User interface <- prediction API <- versioned model artefact
-                                      |
-                                      v
-                              logs and monitoring
+The browser model trades about 6.8% higher MAE for a portable artifact. Both
+models produced zero negative test predictions. The API and browser model
+return the same estimate for the same inputs.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Kaggle data] --> B[Validation]
+    B --> C[Temporal modelling]
+    C --> D[Final test]
+    D --> E[Versioned model]
+    E --> F[FastAPI]
+    F --> G[Streamlit]
+    E --> H[Browser app]
 ```
 
-## Project structure
+## Repository structure
 
 ```text
 .
-├── data/                  # Dataset documentation; local data files are ignored
-├── docs/                  # Problem definition and project decisions
-├── notebooks/             # Numbered exploration and modelling notebooks
-├── src/crop_yield/        # Reusable production Python code
-├── tests/                 # Automated tests
-├── .env.example           # Safe template for environment variables
-├── pyproject.toml         # Package and tool configuration
-├── requirements.txt       # Reproducible Python dependencies
+├── data/                    # Dataset documentation; local data ignored
+├── docs/                    # Problem, validation, architecture, model card
+├── notebooks/               # Eight reproducible analysis stages
+├── scripts/                 # Browser-model export utility
+├── src/crop_yield/          # Validation, modelling, training, and API code
+├── tests/                   # Unit and API contract tests
+├── Dockerfile
+├── docker-compose.yml
+├── streamlit_app.py
 └── README.md
 ```
 
-## Development phases
+## Run locally
 
-1. Define the problem and success criteria.
-2. Acquire and validate the data.
-3. Clean and explore the data.
-4. Engineer features and establish a baseline.
-5. Train, compare, and interpret regression models.
-6. Package the selected model.
-7. Build a FastAPI prediction service.
-8. Build a Streamlit user application.
-9. Test and containerise the system.
-10. Deploy and monitor the application.
+Use Python 3.11 or newer.
 
-## Current status
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
 
-**Phase 10 — Model interpretation**
+Download the Kaggle data as described in [`data/README.md`](data/README.md),
+then train and version the production model:
 
-The source files have been profiled and a reproducible data-quality workflow
-produces one validated observation per country, crop, and year. Exploratory
-analysis shows that crop type strongly separates yield, overall numeric
-associations with yield are weak, 2003 is absent, and rainfall is constant
-through time within each country. The analysis treats these relationships as
-descriptive rather than causal and documents crop-mix confounding in country
-comparisons. A chronological train/validation/test strategy prevents future
-years from influencing model development. The preprocessing pipeline one-hot
-encodes country and crop, standardizes numeric features, reduces pesticide
-right-skew, and tolerates previously unseen categories without learning from
-validation or test data. Validation experiments compare global- and crop-median
-benchmarks with linear regression. Linear regression improves validation MAE
-but still produces physically impossible negative-yield predictions, so it is
-retained as a baseline rather than selected for production. Positive-output and
-tree-based candidates have now been compared. Random forest is the strongest
-initial validation candidate, with substantially lower overall error but
-larger remaining errors for cassava, potatoes, and sweet potatoes.
-Hyperparameters are now compared with expanding temporal folds inside the
-training period. The selected random-forest configuration is stable across
-random seeds and improves outer-validation MAE while preserving non-negative
-yield predictions. Interpretation shows that crop type is the dominant
-predictive input. Temperature, rainfall, pesticide totals, and country also
-matter to the fitted model, but their importance is not causal evidence and is
-affected by feature dependence. The forest cannot extrapolate the year trend:
-future years beyond the training range follow the same terminal branches when
-other inputs are fixed. This limitation must shape the deployment scope or
-motivate a forecasting redesign. The final test years remain untouched.
+```bash
+python -m crop_yield.production
+```
 
-See
-[`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
-for the complete Phase 4 analysis and
-[`docs/validation_strategy.md`](docs/validation_strategy.md) for the modelling
-evaluation design. See
-[`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb)
-for the leakage-safe feature workflow and
-[`notebooks/04_model_experiments.ipynb`](notebooks/04_model_experiments.ipynb)
-for the first model comparison and
-[`notebooks/05_model_selection.ipynb`](notebooks/05_model_selection.ipynb) for
-the nonlinear candidate evaluation and
-[`notebooks/06_hyperparameter_tuning.ipynb`](notebooks/06_hyperparameter_tuning.ipynb)
-for the chronological tuning experiment and
-[`notebooks/07_model_interpretation.ipynb`](notebooks/07_model_interpretation.ipynb)
-for model reliance, caveats, and extrapolation checks.
+Start the API and, in another terminal, the user interface:
+
+```bash
+uvicorn crop_yield.api:app --reload
+streamlit run streamlit_app.py
+```
+
+Run quality checks:
+
+```bash
+ruff check src tests scripts
+pytest -q
+```
+
+After model artifacts exist, run the full local system in containers:
+
+```bash
+docker compose up --build
+```
+
+## Responsible-use boundary
+
+This is a historical conditional estimator, not a causal recommendation engine
+or long-range forecast. Rainfall is constant through time within each country
+in the source data, pesticide use is a national total rather than a per-hectare
+rate, and country can proxy unmeasured technology and reporting differences.
+See [`docs/model_card.md`](docs/model_card.md) for the full evaluation.
 
 ## Data source
 
-The project uses the
-[Crop Yield Prediction Dataset](https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset).
-The raw and processed datasets are not stored in this repository. See
-[`data/README.md`](data/README.md) for download and validation instructions.
+[Crop Yield Prediction Dataset on Kaggle](https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset).
+The data retain their own licence and are not committed to this repository.
 
 ## Author
 
@@ -126,5 +123,4 @@ Engineering.
 
 ## Licence
 
-Project code is available under the [MIT License](LICENSE). The Kaggle dataset
-retains its own licence and terms.
+Project code is available under the [MIT License](LICENSE).
