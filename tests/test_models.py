@@ -16,6 +16,7 @@ from crop_yield.models import (
     build_log_target_ridge_pipeline,
     build_poisson_gradient_boosting_pipeline,
     build_random_forest_pipeline,
+    build_tuned_random_forest_pipeline,
 )
 from crop_yield.preprocessing import split_features_target
 
@@ -88,6 +89,34 @@ class RegressionModelTests(unittest.TestCase):
         predictions = model.predict(features)
 
         self.assertTrue((predictions >= 0).all())
+
+    def test_random_forest_builder_applies_requested_hyperparameters(
+        self,
+    ) -> None:
+        pipeline = build_random_forest_pipeline(
+            n_estimators=25,
+            max_depth=6,
+            min_samples_leaf=3,
+            max_features=0.5,
+            random_state=7,
+            n_jobs=1,
+        )
+        model = pipeline.named_steps["model"]
+
+        self.assertEqual(model.n_estimators, 25)
+        self.assertEqual(model.max_depth, 6)
+        self.assertEqual(model.min_samples_leaf, 3)
+        self.assertAlmostEqual(model.max_features, 0.5)
+        self.assertEqual(model.random_state, 7)
+        self.assertEqual(model.n_jobs, 1)
+
+    def test_tuned_random_forest_uses_selected_configuration(self) -> None:
+        model = build_tuned_random_forest_pipeline().named_steps["model"]
+
+        self.assertEqual(model.n_estimators, 300)
+        self.assertIsNone(model.max_depth)
+        self.assertEqual(model.min_samples_leaf, 1)
+        self.assertAlmostEqual(model.max_features, 0.8)
 
     def test_poisson_gradient_boosting_predictions_are_positive(self) -> None:
         features, target = split_features_target(sample_modeling_data())
