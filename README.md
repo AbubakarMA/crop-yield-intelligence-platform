@@ -65,7 +65,7 @@ User interface <- prediction API <- versioned model artefact
 
 ## Current status
 
-**Phase 8 — Nonlinear model selection**
+**Phase 9 — Temporal hyperparameter tuning**
 
 The source files have been profiled and a reproducible data-quality workflow
 produces one validated observation per country, crop, and year. Exploratory
@@ -84,6 +84,10 @@ retained as a baseline rather than selected for production. Positive-output and
 tree-based candidates have now been compared. Random forest is the strongest
 initial validation candidate, with substantially lower overall error but
 larger remaining errors for cassava, potatoes, and sweet potatoes.
+Hyperparameters are now compared with expanding temporal folds inside the
+training period. The selected random-forest configuration is stable across
+random seeds and improves outer-validation MAE while preserving non-negative
+yield predictions. The final test years remain untouched.
 
 See
 [`notebooks/02_exploratory_data_analysis.ipynb`](notebooks/02_exploratory_data_analysis.ipynb)
@@ -95,7 +99,9 @@ for the leakage-safe feature workflow and
 [`notebooks/04_model_experiments.ipynb`](notebooks/04_model_experiments.ipynb)
 for the first model comparison and
 [`notebooks/05_model_selection.ipynb`](notebooks/05_model_selection.ipynb) for
-the nonlinear candidate evaluation.
+the nonlinear candidate evaluation and
+[`notebooks/06_hyperparameter_tuning.ipynb`](notebooks/06_hyperparameter_tuning.ipynb)
+for the chronological tuning experiment.
 
 ## Data source
 
