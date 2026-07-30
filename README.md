@@ -5,7 +5,7 @@
 An end-to-end machine-learning system for estimating historical agricultural
 yield from crop, country, weather, pesticide, and year data.
 
-**[Open the deployed application](https://crop-yield-intelligence.alutiba.chatgpt.site)**
+**[Open the deployed application](https://abubakarma.github.io/crop-yield-intelligence-platform/)**
 
 ## What the project demonstrates
 
